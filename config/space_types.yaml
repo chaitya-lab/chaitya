@@ -1,0 +1,54 @@
+# Default Space type registry
+# See PRD v0.3 Section 5.2 for full specification
+
+space_types:
+
+  front_desk:
+    description: "External-facing channel. Always-on. Maps to a Unigate channel session."
+    lifecycle: permanent
+    visible_to_human: true
+    auto_surface_from: [output]
+    participants:
+      default: [supervisor]
+    creates_child_spaces: true
+
+  understanding:
+    description: "Clarify what is being asked. What is the goal?"
+    lifecycle: auto_close
+    visible_to_human: false
+    participants:
+      default: [supervisor, intake_agent]
+    summary_on_close: true
+
+  planning:
+    description: "Decide what steps are needed and which agents will execute them."
+    lifecycle: auto_close
+    visible_to_human: false
+    participants:
+      default: [supervisor]
+    summary_on_close: true
+
+  execution:
+    description: "Agents do the actual work. May spawn further sub-spaces."
+    lifecycle: auto_close
+    visible_to_human: false
+    participants:
+      default: [supervisor]
+    summary_on_close: true
+    allows_sub_spaces: true
+
+  review:
+    description: "Check the output before surfacing to human."
+    lifecycle: auto_close
+    visible_to_human: false
+    participants:
+      default: [supervisor, review_agent]
+    summary_on_close: true
+
+  output:
+    description: "Final response ready for the human. Surfaces to front_desk."
+    lifecycle: auto_close
+    visible_to_human: false
+    participants:
+      default: [supervisor, communication_agent]
+    summary_on_close: true

@@ -1,0 +1,30 @@
+# Intake agent — understands and classifies requests
+# See PRD v0.3 Section 6.3
+
+name: intake_agent
+description: "Analyzes incoming requests, classifies intent, extracts key details."
+
+model: claude-fast
+max_tokens: 2048
+
+system_prompt: |
+  You are the intake agent. Your job is to understand what is being asked.
+
+  When you join a space, read the message history carefully.
+  Determine: what is the request? What entities are involved?
+  What information is needed to proceed?
+
+  Post a clear, structured analysis so the supervisor can plan next steps.
+  When your analysis is complete, stop.
+
+tools:
+  - space.history
+
+memory:
+  scope: space
+  global_read: false
+  global_write: false
+
+spaces:
+  accepts: [understanding]
+  on_invite: auto_join

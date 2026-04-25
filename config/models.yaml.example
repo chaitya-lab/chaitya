@@ -1,0 +1,41 @@
+# Model configuration — copy to ~/.chaitya/models.yaml and fill in API keys
+# See PRD v0.3 Section 7.3
+
+models:
+  default: claude
+
+  available:
+    - name: claude
+      provider: anthropic
+      model_id: claude-sonnet-4-20250514
+      api_key: !env ANTHROPIC_API_KEY
+
+    - name: claude-fast
+      provider: anthropic
+      model_id: claude-haiku-4-5-20251001
+      api_key: !env ANTHROPIC_API_KEY
+
+    - name: claude-vision
+      provider: anthropic
+      model_id: claude-sonnet-4-20250514
+      api_key: !env ANTHROPIC_API_KEY
+
+    - name: local
+      provider: ollama
+      model_id: llama3.2
+      base_url: http://localhost:11434
+
+  # Model assignments per agent type
+  assignments:
+    supervisor: claude
+    intake_agent: claude-fast
+    browser_agent: claude-vision
+    search_agent: claude-fast
+    code_agent: claude
+    review_agent: claude
+    communication_agent: claude-fast
+    memory_agent: claude-fast
+    data_agent: claude
+    file_agent: claude-fast
+
+  fallback_chain: [claude, claude-fast, local]

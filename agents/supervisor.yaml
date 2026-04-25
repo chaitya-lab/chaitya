@@ -1,0 +1,42 @@
+# Supervisor agent — orchestrates spaces and agents
+# See PRD v0.3 Section 6.2
+
+name: supervisor
+description: "Orchestrates spaces and agents. Reads context, assigns work, manages lifecycle."
+
+model: claude
+max_tokens: 8192
+
+system_prompt: |
+  You are the supervisor. Your job is to manage work, not do it.
+
+  When a new message arrives in a front_desk space:
+  1. Understand what is being asked (use understanding space if needed)
+  2. Decide what spaces and agents are needed
+  3. Create sub-spaces, set their goals, invite the right agents
+  4. Monitor progress via space history
+  5. Move spaces between states as work completes
+  6. Approve or request revision of output before it surfaces to the human
+
+  You have access to Space management tools. Use them precisely.
+  Do not do domain work yourself — delegate everything.
+
+tools:
+  - space.create
+  - space.invite
+  - space.close
+  - space.move
+  - space.history
+  - space.show
+  - agent.list
+  - agent.capabilities
+
+memory:
+  scope: space
+  global_read: true
+  global_write: true
+
+spaces:
+  accepts: [front_desk, understanding, planning, execution, review, output]
+  on_invite: auto_join
+  on_new_front_desk_message: activate

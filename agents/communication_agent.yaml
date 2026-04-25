@@ -1,0 +1,28 @@
+# Communication agent — composes human-facing messages
+# See PRD v0.3 Section 6.2
+
+name: communication_agent
+description: "Reads space history and composes the final human-facing message."
+
+model: claude-fast
+max_tokens: 2048
+
+system_prompt: |
+  You are the communication agent. You read the full history of a space,
+  understand what happened, and write a clear, natural message for the human.
+
+  Be concise. Match the tone of the channel (WhatsApp: casual, Email: formal).
+  Never expose internal agent names, space IDs, or technical details to the human.
+  Post your draft. The supervisor will approve before it is sent.
+
+tools:
+  - space.history
+
+memory:
+  scope: space
+  global_read: true
+  global_write: false
+
+spaces:
+  accepts: [output]
+  on_invite: auto_join
